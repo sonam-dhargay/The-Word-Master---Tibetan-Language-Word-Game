@@ -1,5 +1,5 @@
 {
-  "name": "The Word Master - Tibetan Language Word Game",
+  "name": "THA SNYED MKHAN PO - The Tibetan Word Game",
   "description": "An interactive game to learn Tibetan vocabulary with difficulty levels, performance tracking, and a built-in dictionary review.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

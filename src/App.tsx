@@ -21,6 +21,7 @@ import {
   Search,
   ExternalLink,
   Languages,
+  Type,
   Volume2,
   VolumeX,
   Lock,
@@ -238,6 +239,23 @@ export default function App() {
       return 'bo';
     }
   });
+  const [tibetanFont, setTibetanFont] = useState<'noto' | 'monlam'>(() => {
+    try {
+      const saved = localStorage.getItem('tibetan_app_font');
+      return (saved === 'noto' || saved === 'monlam') ? saved : 'noto';
+    } catch {
+      return 'noto';
+    }
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-tibetan-font', tibetanFont);
+    try {
+      localStorage.setItem('tibetan_app_font', tibetanFont);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [tibetanFont]);
   const [isMuted, setIsMuted] = useState(false);
   const [wordOfTheDay, setWordOfTheDay] = useState<Word | null>(null);
   const [countdownStr, setCountdownStr] = useState<string>('0h 0m');
@@ -970,7 +988,9 @@ export default function App() {
  
         <div className="flex items-center gap-1.5 md:gap-2">
           <GraduationCap className="text-indigo-600 dark:text-indigo-400 w-6 h-6 md:w-7 md:h-7 shrink-0" />
-          <span className="font-extrabold text-xs sm:text-[13px] md:text-base tracking-tight text-slate-900 dark:text-slate-100 line-clamp-1">
+          <span className={`font-extrabold tracking-tight text-slate-900 dark:text-slate-100 line-clamp-1 ${
+            lang === 'en' ? 'text-[9px] sm:text-[10px] md:text-xs' : 'text-xs sm:text-[13px] md:text-base'
+          }`}>
             {t.title}
           </span>
         </div>
@@ -1109,13 +1129,17 @@ export default function App() {
                         <img 
                           src="https://lh3.googleusercontent.com/d/1Cn0_SQt0hV0J_ECJGcDsZykB1-82wneZ" 
                           alt="Lhakar Academy Logo" 
-                          className="max-h-[115px] md:max-h-[141px] w-auto -mb-2 md:-mb-3 object-contain animate-fadeIn"
+                          className="max-h-[115px] md:max-h-[141px] w-auto mb-10 object-contain animate-fadeIn"
                           referrerPolicy="no-referrer"
                         />
-                        <h2 className="tibetan-text text-2xl md:text-3xl font-black text-slate-900 dark:text-slate-100 tracking-tight mb-0.5 leading-none">
+                        <h2 className={`font-black text-slate-900 dark:text-slate-100 tracking-tight mb-0.5 leading-none ${
+                          lang === 'en' ? 'text-[18px] md:text-[22.5px]' : 'tibetan-text text-2xl md:text-3xl'
+                        }`}>
                           {t.title}
                         </h2>
-                        <h3 className={`text-slate-550 dark:text-slate-400 font-medium mb-6 -mt-1 md:-mt-2 ${lang === 'bo' ? 'text-lg sm:text-xl tibetan-text' : 'text-sm sm:text-base'}`}>
+                        <h3 className={`text-slate-550 dark:text-slate-400 font-medium mb-6 ${
+                          lang === 'en' ? 'mt-4' : '-mt-1 md:-mt-2'
+                        } ${lang === 'bo' ? 'text-lg sm:text-xl tibetan-text' : 'text-sm sm:text-base'}`}>
                           {t.subtitle}
                         </h3>
 
@@ -1803,6 +1827,67 @@ export default function App() {
                     </div>
                   </div>
 
+                  {/* Tibetan Webfont Selection */}
+                  <div className="p-3.5 bg-slate-50 dark:bg-slate-900 border border-slate-150/60 dark:border-slate-800 rounded-xl space-y-3">
+                    <div className="flex items-center gap-2">
+                      <Type size={15} className="text-indigo-650 dark:text-indigo-400" />
+                      <div>
+                        <span className="block text-xs font-bold text-slate-800 dark:text-slate-100">
+                          {lang === 'en' ? 'Tibetan Font Style' : 'བོད་ཡིག་ཡིག་གཟུགས།'}
+                        </span>
+                        <span className="block text-[9px] text-slate-400 dark:text-slate-550 leading-none mt-0.5">
+                          {lang === 'en' ? 'Select your preferred font representation' : 'བོད་ཡིག་གི་ཡིག་གཟུགས་འདེམས་པ།'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        onClick={() => {
+                          setTibetanFont('noto');
+                          playSound('NEXT');
+                        }}
+                        className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                          tibetanFont === 'noto'
+                            ? 'bg-indigo-50/50 dark:bg-indigo-950/20 border-indigo-500 dark:border-indigo-400/60 ring-1 ring-indigo-500/50'
+                            : 'bg-white dark:bg-slate-950/40 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                        }`}
+                      >
+                        <span className="block text-xs font-bold text-slate-800 dark:text-slate-150">Noto Serif Tibetan</span>
+                        <span className="block text-[9px] text-slate-400 mt-0.5 font-sans">Google Unicode Serifs</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          setTibetanFont('monlam');
+                          playSound('NEXT');
+                        }}
+                        className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                          tibetanFont === 'monlam'
+                            ? 'bg-indigo-50/50 dark:bg-indigo-950/20 border-indigo-500 dark:border-indigo-400/60 ring-1 ring-indigo-500/50'
+                            : 'bg-white dark:bg-slate-950/40 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                        }`}
+                      >
+                        <span className="block text-xs font-bold text-slate-800 dark:text-slate-150">Monlam UniDTS</span>
+                        <span className="block text-[9px] text-slate-400 mt-0.5 font-sans">Monlam Webfont</span>
+                      </button>
+                    </div>
+
+                    {/* Font Preview Area */}
+                    <div className="bg-white dark:bg-slate-950/40 border border-slate-150/60 dark:border-slate-850 p-3 rounded-xl text-center space-y-1">
+                      <span className="block text-[9px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-500 text-left">
+                        {lang === 'en' ? 'Font Visual Preview:' : 'ཡིག་གཟུགས་སྔོན་ལྟ།'}
+                      </span>
+                      <div className="py-2.5 px-1 border border-dashed border-slate-200 dark:border-slate-805 rounded-lg">
+                        <p className="tibetan-text text-xl py-1 text-slate-905 dark:text-slate-50">
+                          བཀྲ་ཤིས་བདེ་ལེགས།  བོད་སྐད་ཡིག་རྩེད།
+                        </p>
+                        <span className="text-[9px] text-slate-400 dark:text-slate-550 block font-mono">
+                          {tibetanFont === 'noto' ? 'Active: Noto Serif Tibetan' : 'Active: Monlam UniDTS'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Reset and purge progress option */}
                   <div className="border-t border-slate-100 dark:border-slate-800/80 pt-3.5 mt-2">
                     {!showResetConfirm ? (
@@ -2441,7 +2526,9 @@ export default function App() {
               <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-950/40 select-none">
                 <div className="flex items-center gap-2">
                   <GraduationCap className="text-indigo-600 dark:text-indigo-400 w-6 h-6" />
-                  <span className="font-extrabold text-sm tracking-tight text-slate-900 dark:text-slate-150">
+                  <span className={`font-extrabold tracking-tight text-slate-900 dark:text-slate-150 ${
+                    lang === 'en' ? 'text-[10.5px]' : 'text-sm'
+                  }`}>
                     {t.title}
                   </span>
                 </div>

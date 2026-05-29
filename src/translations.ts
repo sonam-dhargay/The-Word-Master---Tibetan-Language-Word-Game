@@ -2,8 +2,8 @@ export type Language = 'en' | 'bo';
 
 export const translations = {
   en: {
-    title: 'The Word Master',
-    subtitle: 'Tibetan Language Word Game',
+    title: 'THA SNYED MKHAN PO',
+    subtitle: 'The Tibetan Word Game',
     levelEasy: 'Easy',
     levelIntermediate: 'Intermediate',
     levelAdvanced: 'Advanced',
@@ -78,7 +78,7 @@ export const translations = {
     yesResetBtn: 'Yes, Delete Everything',
     noCancelBtn: 'Cancel',
     statsResetSuccessful: 'Progress has been reset!',
-    aboutTitle: 'About The Word Master',
+    aboutTitle: 'About THA SNYED MKHAN PO - The Tibetan Word Game',
     aboutP1: 'Standard Tibetan has a rich literary and classical tradition spanning over 1,300 years. This interactive tool is crafted for language learners to master high-frequency vocabulary, everyday nouns, and functional verbs, as well as classical honorifics and grammatical sentence particles.',
     aboutP2: 'The application employs an Adaptive Vocabulary Engine to keep you in the optimal zone of memory development. When you score highly, challenging intermediate/advanced helper words are auto-injected. If you run into difficulties, foundational items are supplied to rebuild your confidence and mastery.',
     aboutP3: 'Transliteration is rendered in standard Wylie - a systematic representation of the Tibetan alphabet on standard computer keyboards, which aids correct phonetic understanding and spelling.',
